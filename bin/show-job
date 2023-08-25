@@ -1,0 +1,145 @@
+#!/usr/bin/env ruby
+require 'optparse'
+require 'tempfile'
+require 'json'
+require 'open-uri'
+require 'debug'
+
+class String
+  def red
+    colorize(31)
+  end
+
+  def light_blue
+    colorize(36)
+  end
+
+  private
+
+  def colorize(color_code)
+    "\e[#{color_code}m#{self}\e[0m"
+  end
+
+end
+
+# A bug is that
+# --ww + --senior should show results
+# that are worldwide openings for seniors.
+# Currently --ww + --senior will show
+# [ww jobs] + [senior jobs]. 
+# The regex should change.
+# It should be looking for both (senior|world)
+# 
+# This could not be a bug and
+# I might just be thinking too much.
+class ShowJob
+  attr_reader :jobs
+
+  def initialize
+    @parser = OptionParser.new
+    @jobs   = []
+    @fetched_jobs = JSON.parse URI.open('http://www.rubyyeast.com/jobs.json').read
+  end
+
+  def show
+    add_ww_jobs
+    add_senior_jobs
+    add_us_only_jobs
+    add_no_us_jobs
+    if ARGV.empty?
+      puts @parser.help
+      exit
+    end
+    @parser.parse!
+    show_jobs
+  end
+
+  private
+
+  # Add support for non-senior jobs
+  # non senior jobs donot contain the word senior in there
+  def add_senior_jobs
+    @parser.on('--senior', 'Display only senior jobs') do |value|
+      @jobs = @jobs + search_for('senior')
+    end
+  end
+
+  # non ww jobs donot contain the word 'world'
+  # donot_search_for('world')
+  def add_ww_jobs
+    @parser.on('--ww', 'Display only worldwide jobs') do |value|
+      @jobs = @jobs + search_for('world')
+    end
+  end
+
+  def add_us_only_jobs
+    @parser.on('--us-only', 'Display jobs only for the United States') do |value|
+      @jobs = @jobs + us_search
+    end
+  end
+
+  def add_no_us_jobs
+    @parser.on('--no-us', 'Display jobs for places other than United States') do |value|
+      @jobs = @jobs + non_us_search
+    end
+  end
+
+  def search_for(str)
+    result = []
+    @fetched_jobs.each do |arr_of_hash|
+      result << arr_of_hash.select do |job|
+        job["title"].match?(/#{str}/i) || job["misc"].match?(/#{str}/i)
+      end
+    end
+    result.flatten
+  end
+
+  def us_search
+    result = []
+    str = 'US|United States'
+    @fetched_jobs.each do |arr_of_hash|
+      result << arr_of_hash.select do |job|
+        job["title"].match?(/#{str}/) || job["misc"].match?(/#{str}/)
+      end
+    end
+    result.flatten
+  end
+
+  def non_us_search
+    result = []
+    str = 'US|United States'
+    @fetched_jobs.each do |arr_of_hash|
+      result << arr_of_hash.reject do |job|
+        job["title"].match?(/#{str}/) || job["misc"].match?(/#{str}/)
+      end
+    end
+    result.flatten
+  end
+
+  def show_jobs
+    file = Tempfile.new
+    file.write prettify
+    file.close
+    system("less -R #{file.path}")
+    file.unlink
+  end
+
+  def prettify
+    result = "\n"
+    jobs.uniq.each do |job|
+      # remoteonruby job titles have a newline in them
+      # which causes the colors to break when displaying.
+      # This is why I am removing the newline here.
+      str = job['title'].gsub("\n", "").red + "\n" + remove_whitespace(job['misc'].light_blue) + "\n" + job['href'] + "\n"
+      result << str
+      result << "-------------------------\n\n"
+    end
+    result
+  end
+
+  def remove_whitespace(str)
+    str.split(" ").join(' ')
+  end
+end
+
+ShowJob.new.show
