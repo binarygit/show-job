@@ -134,7 +134,7 @@ class ShowJob
       result << str
       result << "-------------------------\n\n"
     end
-    result
+    result + "Created by avi (avii@hey.com)"
   end
 
   def remove_whitespace(str)
