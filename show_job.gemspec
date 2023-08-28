@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = "show-job"
-  s.version     = "0.0.0"
+  s.version     = "0.0.1"
   s.summary     = "Shows jobs fetched from different ruby job sites"
   s.description = "Shows jobs fetched from different ruby job sites"
   s.authors     = ["Avi"]
