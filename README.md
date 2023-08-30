@@ -9,7 +9,7 @@ gem install show-job
 -----
 
 The `show-job` program displays Ruby/Ruby on Rails jobs right in your command line!
-It pulls jobs from __five__ different prominent Ruby job sites. The sites are:
+It pulls jobs from __six__ different prominent Ruby job sites. The sites are:
 1. [Gorails](https://jobs.gorails.com/)
 2. [Weworkremotely](https://weworkremotely.com/)
 3. [Ruby on Remote](https://rubyonremote.com/)
@@ -25,3 +25,14 @@ Usage: show-job [options]
         --us-only                    Display jobs only for the United States
         --no-us                      Display jobs for places other than United States
 ```
+
+## Usuage
+
+### Using the --ww flag
+![ww](https://github.com/binarygit/show-job/assets/87677429/70b96552-3a2c-4c11-acb1-6473874f990c)
+
+### Using the --senior flag
+![senior](https://github.com/binarygit/show-job/assets/87677429/00bba748-f030-4221-9a6f-256a28bfe20c)
+
+### Using the --no-us flag
+![no-us](https://github.com/binarygit/show-job/assets/87677429/8dd92d26-7479-4949-99fc-bcf2b13a9b9c)
