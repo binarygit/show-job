@@ -15,6 +15,7 @@ It pulls jobs from __five__ different prominent Ruby job sites. The sites are:
 3. [Ruby on Remote](https://rubyonremote.com/)
 4. [Ruby on Rails jobs](https://www.ruby-on-rails-jobs.com)
 5. [Rails Hotwire Jobs](https://railshotwirejobs.com/)
+6. [WeAreHiring](https://wearehiring.io/)
 
 Command line usuage summary:
 ```
