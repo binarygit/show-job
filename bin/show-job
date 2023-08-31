@@ -38,7 +38,9 @@ class ShowJob
   def initialize
     @parser = OptionParser.new
     @jobs   = []
-    @fetched_jobs = JSON.parse URI.open('http://www.rubyyeast.com/jobs.json').read
+    @fetched_jobs = JSON.parse URI.open('https://binarygit.github.io/jobs/jobs.json').read
+    @timestamp = @fetched_jobs.pop
+    puts @timestamp
   end
 
   def show
@@ -134,7 +136,7 @@ class ShowJob
       result << str
       result << "-------------------------\n\n"
     end
-    result + "Created by avi (avii@hey.com)"
+    result + "Created by avi (avii@hey.com) | Jobs last fetched on: #{@timestamp}"
   end
 
   def remove_whitespace(str)
