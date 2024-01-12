@@ -9,13 +9,14 @@ gem install show-job
 -----
 
 The `show-job` program displays Ruby/Ruby on Rails jobs right in your command line!
-It pulls jobs from __six__ different prominent Ruby job sites. The sites are:
+It pulls jobs from __seven__ different prominent Ruby job sites. The sites are:
 1. [Gorails](https://jobs.gorails.com/)
 2. [Weworkremotely](https://weworkremotely.com/)
 3. [Ruby on Remote](https://rubyonremote.com/)
 4. [Ruby on Rails jobs](https://www.ruby-on-rails-jobs.com)
 5. [Rails Hotwire Jobs](https://railshotwirejobs.com/)
 6. [WeAreHiring](https://wearehiring.io/)
+7. [Rails Job Board](https://jobs.rubyonrails.org/)
 
 Command line usuage summary:
 ```
