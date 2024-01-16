@@ -3,7 +3,6 @@ require 'optparse'
 require 'tempfile'
 require 'json'
 require 'open-uri'
-require 'debug'
 
 class String
   def red
@@ -40,7 +39,6 @@ class ShowJob
     @jobs   = []
     @fetched_jobs = JSON.parse URI.open('https://binarygit.github.io/jobs/jobs.json').read
     @timestamp = @fetched_jobs.pop
-    puts @timestamp
   end
 
   def show
