@@ -78,43 +78,24 @@ class ShowJob
 
   def add_us_only_jobs
     @parser.on('--us-only', 'Display jobs only for the United States') do |value|
-      @jobs = @jobs + us_search
+      @jobs = @jobs + search_for('US|United States', true)
     end
   end
 
   def add_no_us_jobs
     @parser.on('--no-us', 'Display jobs for places other than United States') do |value|
-      @jobs = @jobs + non_us_search
+      @jobs = @jobs + search_for('US|United States', true, false)
     end
   end
 
-  def search_for(str)
+  def search_for(str, sensitive = false, select = true)
     result = []
+    flag = sensitive ? nil : 'i'
+    regex = Regexp.new(str, flag)
+    method = select ? :select : :reject
     @fetched_jobs.each do |arr_of_hash|
-      result << arr_of_hash.select do |job|
-        job["title"].match?(/#{str}/i) || job["misc"].match?(/#{str}/i)
-      end
-    end
-    result.flatten
-  end
-
-  def us_search
-    result = []
-    str = 'US|United States'
-    @fetched_jobs.each do |arr_of_hash|
-      result << arr_of_hash.select do |job|
-        job["title"].match?(/#{str}/) || job["misc"].match?(/#{str}/)
-      end
-    end
-    result.flatten
-  end
-
-  def non_us_search
-    result = []
-    str = 'US|United States'
-    @fetched_jobs.each do |arr_of_hash|
-      result << arr_of_hash.reject do |job|
-        job["title"].match?(/#{str}/) || job["misc"].match?(/#{str}/)
+      result << arr_of_hash.send(method) do |job|
+          job["title"].match?(regex) || job["misc"].match?(regex)
       end
     end
     result.flatten
