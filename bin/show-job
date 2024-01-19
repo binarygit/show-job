@@ -13,6 +13,10 @@ class String
     colorize(36)
   end
 
+  def squish
+    gsub(/[[:space:]]+/, " ").strip
+  end
+
   private
 
   def colorize(color_code)
@@ -130,15 +134,11 @@ class ShowJob
       # remoteonruby job titles have a newline in them
       # which causes the colors to break when displaying.
       # This is why I am removing the newline here.
-      str = job['title'].gsub("\n", "").red + "\n" + remove_whitespace(job['misc'].light_blue) + "\n" + job['href'] + "\n"
+      str = job['title'].squish.red + "\n" + job['misc'].squish.light_blue + "\n" + job['href'] + "\n"
       result << str
       result << "-------------------------\n\n"
     end
     result + "Created by avi (avii@hey.com) | Jobs last fetched on: #{@timestamp}"
-  end
-
-  def remove_whitespace(str)
-    str.split(" ").join(' ')
   end
 end
 
